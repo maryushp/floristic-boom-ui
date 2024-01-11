@@ -1,17 +1,34 @@
-main
+html
+  user-select: none
+  height: 100vh
+
+header, main, footer
   font-family: "Antic Didone", serif
   font-weight: 400
   font-style: normal
+
+main
+  display: flex
+  flex-flow: row wrap
+  align-items: center
+  justify-content: center
+  min-height: 90vh
+  flex-grow: 1
 
 header
   min-height: 10vh
   background-color: #114f02
 
-  a, a:visited, svg
-    text-decoration: none
-    margin: 8px
-    color: white
-    cursor: pointer
+a, a:visited, svg
+  text-decoration: none !important
+  margin: 8px
+  color: white
+  cursor: pointer
 
 footer
   background-color: #114f02
+
+.scaled-image
+  width: 100%
+  height: 100%
+  object-fit: cover
