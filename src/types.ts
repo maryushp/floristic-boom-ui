@@ -38,7 +38,7 @@ export interface Flower {
     availableQuantity: number
 }
 
-export interface Types {
+export interface Bouquet {
     id: number,
     name: string,
     price: number,
