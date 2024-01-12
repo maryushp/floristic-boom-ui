@@ -11,7 +11,7 @@ type BouquetCardProps = {
 const BouquetCard = (props: BouquetCardProps) => {
     const {bouquet} = props
     return (
-        <div className="card card-bouquet" style={{width: 300}}>
+        <div className="card card-bouquet shadow" style={{width: 300}}>
             <Image src={bouquet.imageUri} className="card-img-top"/>
             <div className="card-body">
                 <Link to={"/flower/" + bouquet.id} className="text-black">
