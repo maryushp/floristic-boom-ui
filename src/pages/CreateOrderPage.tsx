@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import "../styles/css/createOrderPage.css"
 import {Button, Image} from "react-bootstrap";
+import "../styles/css/CreateOrderPage.css"
 import Form from "react-bootstrap/Form";
 import {Modal} from "react-bootstrap";
 import {Input} from "reactstrap";

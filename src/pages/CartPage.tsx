@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import "../styles/css/cartPage.css"
+import "../styles/css/CartPage.css"
 import {Button, Image} from "react-bootstrap";
 import {DashCircle, PlusCircle} from "react-bootstrap-icons";
 import {Link, useNavigate} from "react-router-dom";
