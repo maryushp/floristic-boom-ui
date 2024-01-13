@@ -1,8 +1,9 @@
 import React from 'react';
-import {Bouquet, Flower} from "../types";
+import {Bouquet, Flower} from "../utils/types";
 import {Image} from "react-bootstrap";
-import {Cart} from "react-bootstrap-icons";
+import {Bag, BagCheckFill} from "react-bootstrap-icons";
 import {Link} from "react-router-dom";
+import useCart from "../hooks/cartHook";
 
 type BouquetCardProps = {
     bouquet: Bouquet
@@ -10,6 +11,7 @@ type BouquetCardProps = {
 
 const BouquetCard = (props: BouquetCardProps) => {
     const {bouquet} = props
+    const {isInBag, handleAddToCart, handleRemoveFromCart} = useCart(bouquet);
     return (
         <div className="card card-bouquet shadow" style={{width: 300}}>
             <Image src={bouquet.imageUri} className="card-img-top"/>
@@ -24,7 +26,10 @@ const BouquetCard = (props: BouquetCardProps) => {
                 }).join(", ")}</p>
                 <div className="d-flex justify-content-between align-items-center">
                     <h4 className="card-text pt-2 ">{bouquet.price}zł</h4>
-                    <Cart size={24} color="green"/>
+                    {isInBag ?
+                        <BagCheckFill size={24} onClick={handleRemoveFromCart}/>
+                        :
+                        <Bag size={24} onClick={handleAddToCart}/>}
                 </div>
             </div>
         </div>)
