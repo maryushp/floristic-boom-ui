@@ -49,3 +49,8 @@ export interface Bouquet {
     flowers: Flower[],
     user: User
 }
+
+export interface CartPosition {
+    bouquetId: number,
+    quantity: number
+}
