@@ -10,9 +10,9 @@ const CartPage = () => {
     const navigate = useNavigate()
 
     return (
-        <div className="border-3 my-5 d-flex flex-column cart-page align-items-center">
+        <div className="d-flex flex-column cart-page align-items-center">
 
-            {bouquetsWithQuantity ?
+            {!bouquetsWithQuantity ?
                 (
                     <div className="d-flex flex-column align-items-center justify-content-center gap-3">
                         <h4 className="text-center fw-bold">Your cart is empty!</h4>
@@ -21,13 +21,14 @@ const CartPage = () => {
                 :
                 (
                     <>
-                        <div className="border border-2 border-success d-flex flex-wrap p-3 col-12 mb-4 rounded-4">
+                        <div className="mt-2 border border-1 border-success d-flex flex-wrap p-3 col-12 mb-4 rounded-4">
                             <div className="d-flex flex-column align-items-center col-3">
                                 <Image src="logo_2.png" className="position-img"/>
                                 <h4 className="text-black fw-bold">ROSES BOUQUET</h4>
                             </div>
                             <div className="w-50 col-3">
-                                <h4 className="text-black text-center fw-bold my-4">Bouquet made from 101 roses. Roses are imported from Netherlands</h4>
+                                <h4 className="text-black text-center fw-bold my-4">Bouquet made from 101 roses. Roses
+                                    are imported from Netherlands</h4>
                                 <h4 className="text-black text-center fw-bold">120 ZL</h4>
                             </div>
                             <div className="align-self-center col-3 d-flex flex-wrap justify-content-center gap-5">
@@ -41,7 +42,7 @@ const CartPage = () => {
                         </div>
                         <h2 className="text-success text-center fw-bold">240 ZL</h2>
                         <Link to={"/create-order"}>
-                            <Button variant="success" className="rounded-4 fw-bold">CREATE ORDER</Button>
+                            <Button variant="success" className="rounded-4 fw-bold my-2">CREATE ORDER</Button>
                         </Link>
                     </>)
             }
