@@ -10,16 +10,16 @@ const Header = () => {
     return (
         <header className="navbar navbar-dark text-white justify-content-center">
             <div className="d-flex justify-content-between align-items-center w-75">
-                <div className="logo d-none d-md-block w-25 ">
+                <Link to={"/"} className="logo d-none d-md-block w-25 ">
                     <Image src="logo.png" className="img-fluid"/>
-                </div>
+                </Link>
                 <div className="justify-content-center d-flex flex-grow-1 px-5">
                     <Input type="search"
                            placeholder="Search"
                            className="me-2 w-75 rounded-4"
                            aria-label="Search"></Input>
                 </div>
-                <Cart size={24} onClick={() => navigate("/checkout")}/>
+                <Cart size={24} onClick={() => navigate("/cart")}/>
                 {user ?
                     (
                         <Nav className="align-items-center">
