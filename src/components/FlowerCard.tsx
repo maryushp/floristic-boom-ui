@@ -1,5 +1,5 @@
 import React from 'react';
-import {Flower} from "../types";
+import {Flower} from "../utils/types";
 import {Image} from "react-bootstrap";
 import {PlusCircle} from "react-bootstrap-icons";
 import {Link} from "react-router-dom";
@@ -11,9 +11,10 @@ type FlowerCardProps = {
 const FlowerCard = (props: FlowerCardProps) => {
     const {flower} = props
     return (
-        <div className="card card-flower shadow" style={{width: 300}}>
-
-            <Image src={flower.imageUri} className="card-img-top"/>
+        <div className="card card-flower shadow " style={{width: 250}}>
+            <div style={{width: 249, height: 300}}>
+                <Image src={flower.imageUri} className="card-img-top scaled-image"/>
+            </div>
 
             <div className="card-body">
                 <Link to={"/flower/" + flower.id} className="text-black">
@@ -25,7 +26,6 @@ const FlowerCard = (props: FlowerCardProps) => {
                     <PlusCircle size={24} color="green"/>
                 </div>
             </div>
-
         </div>)
 };
 
