@@ -19,6 +19,12 @@ export enum Color {
     MAROON
 }
 
+export enum PaymentType {
+    TRANSFER = 'TRANSFER',
+    ONLINE = 'ONLINE',
+    OFFLINE = 'OFFLINE'
+}
+
 export interface User {
     id: number,
     email: string,
@@ -48,4 +54,32 @@ export interface Bouquet {
     isCustom: boolean,
     flowers: Flower[],
     user: User
+}
+
+export interface Address {
+    id: number,
+    city: string,
+    street: string,
+    house: string,
+    apartment: string,
+    postalCode: string
+}
+
+export interface DeliveryType {
+    id: number,
+    name: string,
+    price: number
+}
+
+export interface Delivery {
+    id: number,
+    deliveryType: DeliveryType,
+    address: Address
+}
+
+export interface Bonus {
+    id: number,
+    promoCode: string,
+    discount: number,
+    durationDate: string
 }
