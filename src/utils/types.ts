@@ -52,8 +52,18 @@ export interface Bouquet {
     imageUri: string,
     wrapperColor: Color,
     isCustom: boolean,
-    flowers: Flower[],
+    flowers: FlowerBouquet[],
     user: User
+}
+
+export interface CartPosition {
+    bouquetId: number,
+    quantity: number
+}
+
+export interface FlowerBouquet {
+    flower: Flower,
+    quantity: number
 }
 
 export interface Address {
