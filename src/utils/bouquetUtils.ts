@@ -1,4 +1,5 @@
 import axiosInstance from "./axiosConfig";
+import {Bouquet} from "./types";
 
 const readAllBouquets = async (currentPage: number, currentSize: number) => {
     const bouquetsEndpoint = "/api/v1/bouquet";
@@ -6,4 +7,11 @@ const readAllBouquets = async (currentPage: number, currentSize: number) => {
     const response = await axiosInstance.get(bouquetsEndpoint + pageParams)
     return response.data
 }
-export {readAllBouquets}
+
+const findBouquet = async (id: number) => {
+    const bouquetsEndpoint = "/api/v1/bouquet";
+    const response =  await axiosInstance.get<Bouquet>(bouquetsEndpoint + "/" + id)
+    return response.data
+}
+
+export {readAllBouquets, findBouquet}

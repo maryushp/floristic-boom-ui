@@ -93,3 +93,8 @@ export interface Bonus {
     discount: number,
     durationDate: string
 }
+
+export interface BouquetWithQuantity {
+    bouquet: Bouquet,
+    quantity: number
+}
