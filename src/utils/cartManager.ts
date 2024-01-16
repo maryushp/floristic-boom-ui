@@ -26,14 +26,6 @@ export const removePosition = (id: number) => {
     setCartPositionsToCookies(positions);
 };
 
-export const updatePositionQuantity = (id: number | undefined, quantity: number) => {
-    let positions = getCartPositionsFromCookies();
-    positions = positions.map((position) =>
-        position.bouquetId === id ? {...position, quantity: quantity} : position
-    );
-    setCartPositionsToCookies(positions);
-};
-
 export const getPositionByBouquetId = (id: number): CartPosition | undefined => {
     const positions = getCartPositionsFromCookies();
     return positions.find((position) => position.bouquetId === id);
