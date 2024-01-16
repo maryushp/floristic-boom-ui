@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react';
-import {Bouquet, BouquetWithQuantity, CartPosition} from "../utils/types";
+import {Bouquet, BouquetWithQuantity} from "../utils/types";
 import {Link} from "react-router-dom";
 import {Button, Image} from "react-bootstrap";
 import {DashCircle, PlusCircle} from "react-bootstrap-icons";
-import {getCookie, setCookie} from "../utils/cookiesManager";
+import {updatePositionQuantity} from "../utils/cartManager";
 
 type CartPositionProps = {
     bouquetWithQuantity: BouquetWithQuantity
@@ -14,9 +14,18 @@ type CartPositionProps = {
 
 const CartPositionCard = (props: CartPositionProps) => {
     const {bouquetWithQuantity, setIsDeleting, setPrice, price} = props
-    const [bouquet, setBouquet] = useState<Bouquet>(bouquetWithQuantity.bouquet)
+    const [bouquet, _ ] = useState<Bouquet>(bouquetWithQuantity.bouquet)
     const [quantity, setQuantity] = useState(bouquetWithQuantity.quantity)
 
+    const decreaseQuantity = () => {
+        setPrice(price - bouquet.price)
+        setQuantity(quantity - 1)
+    }
+
+    const increaseQuantity = () => {
+        setPrice(price + bouquet.price)
+        setQuantity(quantity + 1)
+    }
 
     useEffect(() => {
         if (quantity === 0) {
@@ -26,29 +35,6 @@ const CartPositionCard = (props: CartPositionProps) => {
             updatePositionQuantity(bouquet.id, quantity)
         }
     }, [quantity]);
-
-    const updatePositionQuantity = (id: number, quantity: number) => {
-        let positions: CartPosition[] = getCookie('cart').positions
-        positions = positions.filter((position) => {
-            if (position.bouquetId === id) {
-                if (quantity === 0) {
-                    return false;
-                }
-            }
-            return true;
-        });
-
-        positions = positions.map((position) =>
-            position.bouquetId === id ? {...position, quantity: quantity} : position
-        );
-
-        console.log(positions)
-        setCartPositionsToCookies(positions);
-    };
-
-    const setCartPositionsToCookies = (positions: CartPosition[]) => {
-        setCookie("cart", JSON.stringify({positions}));
-    };
 
     if (!bouquet) {
         return <h4 className="text-black text-center fw-bold">Loading...</h4>;
@@ -73,18 +59,12 @@ const CartPositionCard = (props: CartPositionProps) => {
                     <DashCircle
                         size={30}
                         className="icon-buttons text-dark"
-                        onClick={
-                        () => {
-                            setPrice(price - bouquet.price)
-                            setQuantity(quantity - 1)}}/>
+                        onClick={decreaseQuantity}/>
                     <h3 className="text-black text-center fw-bold mx-4 mt-2">{quantity}</h3>
                     <PlusCircle
                         size={30}
                         className="icon-buttons text-dark"
-                        onClick={() => {
-                            setPrice(price + bouquet.price)
-                            setQuantity(quantity + 1)
-                        }}/>
+                        onClick={increaseQuantity}/>
                 </div>
                 <Button
                     variant="outline-danger"
