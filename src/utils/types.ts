@@ -32,6 +32,7 @@ export interface User {
     lastName: string,
     phone: string,
     imageUri: string
+    addresses: Address[]
 }
 
 export interface Flower {
