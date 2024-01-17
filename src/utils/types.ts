@@ -56,6 +56,13 @@ export interface Bouquet {
     user: User
 }
 
+export interface BouquetCreationRequest {
+    name: string,
+    description: string,
+    wrapperColor: string,
+    positions: FlowerBouquetRequest[],
+}
+
 export interface CartPosition {
     bouquetId: number,
     quantity: number
@@ -63,6 +70,11 @@ export interface CartPosition {
 
 export interface FlowerBouquet {
     flower: Flower,
+    quantity: number
+}
+
+export interface FlowerBouquetRequest {
+    flowerId: number,
     quantity: number
 }
 
