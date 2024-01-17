@@ -17,7 +17,7 @@ const PaymentTypeCard = (props: PaymentTypeCardProps) => {
     }
 
     return (
-        <div className="border border-success border-2 d-flex flex-column gap-3 rounded-4 p-2">
+        <div className="border border-success border-2 d-flex flex-column gap-3 rounded-4 p-4">
             <h4 className="text-center fw-bold text-capitalize">PAYMENT</h4>
             <Form className="fw-bold h5">
                 <Form.Check
