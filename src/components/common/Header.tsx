@@ -1,11 +1,13 @@
 import React from "react";
 import {Input, Nav, NavLink} from 'reactstrap';
 import {Link, useNavigate} from "react-router-dom";
-import {BoxArrowRight, Cart} from "react-bootstrap-icons";
+import {BoxArrowRight, Cart, Flower1} from "react-bootstrap-icons";
 import {Image} from "react-bootstrap";
+import {User} from "../../utils/types";
+import {getUserFromStorage} from "../../utils/userUtils";
 
 const Header = () => {
-    const user = null
+    const user: User | null = getUserFromStorage()
     const navigate = useNavigate()
     return (
         <header className="navbar navbar-dark text-white justify-content-center">
@@ -23,9 +25,13 @@ const Header = () => {
                 {user ?
                     (
                         <Nav className="align-items-center">
+                            <Link to={"/bouquets/custom"}
+                                  className="d-none d-lg-flex align-items-center justify-content-between p-2 text-white">
+                                <Flower1 size={24}/>
+                            </Link>
                             <Link to={"/profile/" + 1}
                                   className="d-none d-lg-flex align-items-center justify-content-between p-2 text-white">
-                                <span className="">Name</span>
+                                <span className="">{user.email}</span>
                             </Link>
                             <BoxArrowRight className="d-none d-md-block pe-auto " to="/"
                                            size={24}/>
