@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useState} from 'react';
+import React, {ChangeEvent, useEffect, useState} from 'react';
 import Form from "react-bootstrap/Form";
 import {PaymentType} from "../utils/types";
 
@@ -9,6 +9,10 @@ type PaymentTypeCardProps = {
 const PaymentTypeCard = (props: PaymentTypeCardProps) => {
     const {setPaymentType} = props
     const [paymentType, changePaymentType] = useState<PaymentType>(PaymentType.ONLINE)
+
+    useEffect(() => {
+        setPaymentType(PaymentType.ONLINE)
+    }, []);
 
     const handlePaymentChange = (event: ChangeEvent<HTMLInputElement>) => {
         event.persist()

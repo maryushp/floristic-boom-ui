@@ -94,12 +94,6 @@ export interface DeliveryType {
     price: number
 }
 
-export interface Delivery {
-    id: number,
-    deliveryType: DeliveryType,
-    address: Address
-}
-
 export interface Bonus {
     id: number,
     promoCode: string,
@@ -110,4 +104,12 @@ export interface Bonus {
 export interface BouquetWithQuantity {
     bouquet: Bouquet,
     quantity: number
+}
+
+export interface OrderCreationRequest {
+    paymentType: PaymentType,
+    addressId: number,
+    deliveryTypeId: number,
+    bonusId: number | undefined,
+    bouquets: BouquetWithQuantity[]
 }

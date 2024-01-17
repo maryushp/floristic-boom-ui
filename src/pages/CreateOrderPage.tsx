@@ -1,17 +1,28 @@
 import React, {useEffect, useState} from "react";
 import "../styles/css/CreateOrderPage.css"
 import {Button} from "react-bootstrap";
-import {Address, Bonus, BouquetWithQuantity, CartPosition, Delivery, DeliveryType, PaymentType} from "../utils/types";
-import {getCookie} from "../utils/cookiesManager";
+import {
+    Address,
+    Bonus,
+    BouquetWithQuantity,
+    CartPosition,
+    DeliveryType,
+    OrderCreationRequest,
+    PaymentType
+} from "../utils/types";
+import {getCookie, removeCookie} from "../utils/cookiesManager";
 import {findBouquet} from "../utils/bouquetUtils";
 import OrderPositionCard from "../components/OrderPositionCard";
 import Loader from "../components/common/Loader";
 import PaymentTypeCard from "../components/PaymentTypeCard";
 import DeliveryTypeCard from "../components/DeliveryTypeCard";
 import BonusComponent from "../components/BonusComponent";
+import {createOrder} from "../utils/orderUtils";
+import {isAxiosError} from "axios";
+import {useNavigate} from "react-router-dom";
 
 const CreateOrderPage = () => {
-    const [positions, setPositions] = useState<CartPosition[]>(getCookie('cart').positions)
+    const [positions, _] = useState<CartPosition[]>(getCookie('cart') && getCookie('cart').positions)
     const [bouquetsWithQuantity, setBouquetsWithQuantity] = useState<BouquetWithQuantity[]>()
     const [price, setPrice] = useState(0)
 
@@ -23,7 +34,9 @@ const CreateOrderPage = () => {
 
     const [bonus, setBonus] = useState<Bonus>()
 
-    const [delivery, setDelivery] = useState<Delivery>()
+    const navigate = useNavigate()
+
+    const [isOrderPlaced, setIsOrderPlaced] = useState(false)
 
     useEffect(() => {
         fetchBouquets();
@@ -49,7 +62,32 @@ const CreateOrderPage = () => {
         setPrice(sum);
     };
 
-    return (isLoading ? <Loader/> :
+    const handleOrderConfirmation = () => {
+        setIsLoading(true)
+        if (paymentType && address && selectedDeliveryType && bouquetsWithQuantity) {
+            const ocr: OrderCreationRequest = {
+                paymentType: paymentType,
+                addressId: address.id,
+                deliveryTypeId: selectedDeliveryType.id,
+                bonusId: bonus?.id,
+                bouquets: bouquetsWithQuantity
+            }
+            try {
+                createOrder(ocr)
+                removeCookie('cart')
+                setIsOrderPlaced(true)
+                setIsLoading(false)
+                navigate("/")
+            } catch (e) {
+                if (isAxiosError(e)) {
+                    console.log("Error while creating order")
+                }
+            }
+        }
+        setIsLoading(false)
+    }
+
+    return (isLoading ? <Loader/> : isOrderPlaced ? <h4 className="fw-bold">Thank you for the purchase!</h4> :
             <div className="order-page d-flex flex-column">
                 <div className="d-flex flex-column align-items-center position-absolute confirmation-div">
                     {bonus ?
@@ -62,7 +100,7 @@ const CreateOrderPage = () => {
                         :
                         (<h2 className="text-success text-center fw-bold">{selectedDeliveryType ? price + selectedDeliveryType.price : price} ZL</h2>)
                     }
-                    <Button variant="success" className="rounded-4 fw-bold px-4 py-2 fs-5">CONFIRM</Button>
+                    <Button variant="success" className="rounded-4 fw-bold px-4 py-2 fs-5" onClick={() => handleOrderConfirmation()}>CONFIRM</Button>
                     {bonus ?
                         (<h2 className="text-success text-center fw-bold mt-3">Discount {bonus.discount * 100}%</h2>)
                         : (<></>)

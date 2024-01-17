@@ -1,9 +1,9 @@
 import React, {ChangeEvent, useEffect, useState} from 'react';
-import {Address, DeliveryType, User} from "../utils/types";
+import {Address, DeliveryType} from "../utils/types";
 import Form from "react-bootstrap/Form";
 import {readAllDeliveryTypes} from "../utils/deliveryUtils";
 import Loader from "./common/Loader";
-import {findUser} from "../utils/userUtils";
+import {getUserFromStorage} from "../utils/userUtils";
 
 type DeliveryTypeCardProps = {
     setSelectedDeliveryType: (deliveryType: DeliveryType) => void
@@ -18,7 +18,7 @@ const DeliveryTypeCard = (props: DeliveryTypeCardProps) => {
     const [addresses, setAddresses] = useState<Address[]>()
 
     useEffect(() => {
-        fetchUserAddresses()
+        setAddresses(getUserFromStorage()?.addresses)
         fetchDeliveryTypes();
         setIsLoading(false);
     }, []);
@@ -37,16 +37,6 @@ const DeliveryTypeCard = (props: DeliveryTypeCardProps) => {
             setSelectedAddress(addresses[0])
         }
     }, [addresses]);
-
-    const fetchUserAddresses = async () => {
-        const jsonString = localStorage.getItem('user');
-        if (jsonString) {
-            const userData = JSON.parse(jsonString);
-            const userId: number = userData.id;
-            const user: User = await findUser(userId)
-            setAddresses(user.addresses)
-        }
-    }
 
     const fetchDeliveryTypes = async () =>  {
         const deliveryPromises = await readAllDeliveryTypes();
@@ -99,7 +89,7 @@ const DeliveryTypeCard = (props: DeliveryTypeCardProps) => {
                         })}
                     </Form.Select>)
                     :
-                    (<h4 className="fw-bold">Address: Kwiatowa 31</h4>)
+                    (<h4 className="fw-bold">Address: Flowery 31</h4>)
                 }
             </div>
     );
