@@ -17,7 +17,7 @@ const BouquetsPage = () => {
         currentPage,
         currentSize,
         error,
-    } = useDataHook({getFunction: readAllBouquets});
+    } = useDataHook({defaultSize:Math.floor((window.innerWidth * 0.8) / 300) * 2,getFunction: readAllBouquets});
 
     return (error ?
         <div className="align-self-center alert alert-info  align-self-start ">
