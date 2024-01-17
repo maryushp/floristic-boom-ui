@@ -4,7 +4,7 @@ import BouquetCard from "../components/BouquetCard";
 import Loader from "../components/common/Loader";
 import PaginationList from "../components/common/PaginationList";
 import {Button} from "reactstrap";
-import {readAllBouquets} from "../utils/bouquetUtils";
+import {readUserBouquets} from "../utils/bouquetUtils";
 import useDataHook from "../hooks/dataHook";
 
 const BouquetsPage = () => {
@@ -17,7 +17,7 @@ const BouquetsPage = () => {
         currentPage,
         currentSize,
         error,
-    } = useDataHook({defaultSize:Math.floor((window.innerWidth * 0.8) / 300) * 2,getFunction: readAllBouquets});
+    } = useDataHook({defaultSize:Math.floor((window.innerWidth * 0.8) / 300) * 2,getFunction: readUserBouquets});
 
     return (error ?
         <div className="align-self-center alert alert-info  align-self-start ">

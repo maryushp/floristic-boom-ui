@@ -1,22 +1,22 @@
 export enum Color {
-    RED,
-    GREEN,
-    BLUE,
-    YELLOW,
-    BLACK,
-    WHITE,
-    ORANGE,
-    PURPLE,
-    PINK,
-    BROWN,
-    GRAY,
-    CYAN,
-    MAGENTA,
-    TEAL,
-    LIME,
-    OLIVE,
-    NAVY,
-    MAROON
+    RED = "Red",
+    GREEN = "Green",
+    BLUE = "Blue",
+    YELLOW = "Yellow",
+    BLACK = "Black",
+    WHITE = "White",
+    ORANGE = "Orange",
+    PURPLE = "Purple",
+    PINK = "Pink",
+    BROWN = "Brown",
+    GRAY = "Gray",
+    CYAN = "Cyan",
+    MAGENTA = "Magenta",
+    TEAL = "Teal",
+    LIME = "Lime",
+    OLIVE = "Olive",
+    NAVY = "Navy",
+    MAROON = "Maroon"
 }
 
 export enum PaymentType {
@@ -57,6 +57,13 @@ export interface Bouquet {
     user: User
 }
 
+export interface BouquetCreationRequest {
+    name: string,
+    description: string,
+    wrapperColor: string,
+    positions: FlowerBouquetRequest[],
+}
+
 export interface CartPosition {
     bouquetId: number,
     quantity: number
@@ -64,6 +71,11 @@ export interface CartPosition {
 
 export interface FlowerBouquet {
     flower: Flower,
+    quantity: number
+}
+
+export interface FlowerBouquetRequest {
+    flowerId: number,
     quantity: number
 }
 
