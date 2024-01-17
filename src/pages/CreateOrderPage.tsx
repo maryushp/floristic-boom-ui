@@ -1,139 +1,84 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import "../styles/css/CreateOrderPage.css"
-import {Button, Image} from "react-bootstrap";
-import "../styles/css/CreateOrderPage.css"
-import Form from "react-bootstrap/Form";
-import {Modal} from "react-bootstrap";
-import {Input} from "reactstrap";
+import {Button} from "react-bootstrap";
+import {Address, Bonus, BouquetWithQuantity, CartPosition, Delivery, DeliveryType, PaymentType} from "../utils/types";
+import {getCookie} from "../utils/cookiesManager";
+import {findBouquet} from "../utils/bouquetUtils";
+import OrderPositionCard from "../components/OrderPositionCard";
+import Loader from "../components/common/Loader";
+import PaymentTypeCard from "../components/PaymentTypeCard";
+import DeliveryTypeCard from "../components/DeliveryTypeCard";
+import BonusComponent from "../components/BonusComponent";
 
 const CreateOrderPage = () => {
-    const [bonusActivated, setBonusActivated] = useState(false)
-    const [showBonusDialog, setShowBonusDialog] = useState(false);
-    const [showAddressDialog, setShowAddressDialog] = useState(false);
-    const [incorrectBonusCode, setIncorrectBonusCode] = useState(false);
+    const [positions, setPositions] = useState<CartPosition[]>(getCookie('cart').positions)
+    const [bouquetsWithQuantity, setBouquetsWithQuantity] = useState<BouquetWithQuantity[]>()
+    const [price, setPrice] = useState(0)
 
-    const handleShowBonusDialog = () => setShowBonusDialog(true)
-    const handleCloseBonusDialog = () => {
-        setShowBonusDialog(false)
-        setIncorrectBonusCode(false)
-    }
+    const [isLoading, setIsLoading] = useState(true)
 
-    const handleShowAddressDialog = () => setShowAddressDialog(true)
-    const handleCloseAddressDialog = () => setShowAddressDialog(false)
+    const [paymentType, setPaymentType] = useState<PaymentType>()
+    const [selectedDeliveryType, setSelectedDeliveryType] = useState<DeliveryType>()
+    const [address, setAddress] = useState<Address>()
 
-    return (
-        <div className="order-page d-flex flex-column">
-            <div className="d-flex flex-column align-items-center position-absolute confirmation-div">
-                {bonusActivated ?
-                    (<h2 className="text-success text-center fw-bold">120 ZL <del className="text-danger">240 ZL</del></h2>)
-                :
-                    (<h2 className="text-success text-center fw-bold">240 ZL</h2>)
-                }
-                <Button variant="success" className="rounded-4 fw-bold">CONFIRM</Button>
-                {bonusActivated ?
-                    (<h2 className="text-success text-center fw-bold mt-3">50% Discount</h2>)
-                : (<></>)
-                }
-            </div>
+    const [bonus, setBonus] = useState<Bonus>()
 
-            <div className="d-flex flex-wrap justify-content-center gap-4">
-                <div className="border border-success border-2 d-flex flex-column align-items-center gap-2 rounded-4 p-3">
-                    <Image src="logo_2.png" className="position-img"/>
-                    <h4 className="text-center fw-bold text-capitalize">ROSES BOUQUET</h4>
-                    <h5 className="text-center fw-bold">Amount: 1</h5>
-                </div>
-            </div>
+    const [delivery, setDelivery] = useState<Delivery>()
 
-            <div className="d-flex flex-wrap justify-content-center gap-5 mt-5">
-                <div className="border border-success border-2 d-flex flex-column gap-3 rounded-4 p-2">
-                    <h4 className="text-center fw-bold text-capitalize">DELIVERY</h4>
-                    <div className="fw-bold h5">
-                        <Form.Check
-                            type="radio"
-                            label="Shop"
-                            name="group-1"
-                            className="mt-3"
-                        />
-                        <Form.Check
-                            type="radio"
-                            label="Delivery"
-                            name="group-1"
-                            className="mt-3"
-                            checked={true}
-                        />
-                    </div>
-                    <h4 className="text-center fw-bold">Address: Wroblewskiego 27</h4>
-                    <Button variant="outline-success rounded-4 fw-bold" onClick={handleShowAddressDialog}>Edit Address</Button>
-                </div>
-                <div className="border border-success border-2 d-flex flex-column gap-3 rounded-4 p-2">
-                    <h4 className="text-center fw-bold text-capitalize">PAYMENT</h4>
-                    <div className="fw-bold h5">
-                        <Form.Check
-                            type="radio"
-                            label="In the shop/To the courier"
-                            name="group-2"
-                            className="mt-3"
-                        />
-                        <Form.Check
-                            type="radio"
-                            label="Online"
-                            name="group-2"
-                            className="mt-3"
-                            checked={true}
-                        />
-                    </div>
-                </div>
-            </div>
+    useEffect(() => {
+        fetchBouquets();
+        setIsLoading(false);
+    }, []);
 
-            <div className="d-flex flex-column align-items-center mt-5 gap-2">
-                {bonusActivated ?
-                    (<h4 className="fw-bold text-center text-success">Bonus Code Activated!</h4>)
-                    :
-                    (<>
-                        <h4 className="fw-bold text-center">Are you a Loyalty Program member?</h4>
-                        <Button variant="success" className="rounded-4 fw-bold" onClick={handleShowBonusDialog}>ENTER BONUS CODE</Button>
-                    </>)
-                }
-            </div>
+    const fetchBouquets = async () => {
+        const bouquetPromises = positions.map(async (cartPosition) => {
+            const bouquet = await findBouquet(cartPosition.bouquetId);
+            return {
+                bouquet,
+                quantity: cartPosition.quantity
+            };
+        });
+        const bouquetsData = await Promise.all(bouquetPromises);
 
-            <Modal show={showBonusDialog} onHide={handleCloseBonusDialog} backdrop="static">
-                <Modal.Header closeButton>
-                    <Modal.Title>Enter bonus code:</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Input className={incorrectBonusCode ? `rounded-4 border border-danger border-2`: `rounded-4`}></Input>
-                </Modal.Body>
-                <Modal.Footer className="justify-content-center d-flex flex-column">
-                    <Button variant="success rounded-4">
-                        Confirm
-                    </Button>
-                    {incorrectBonusCode ?
-                        (<h5 className="text-danger fw-bold mt-3">Incorrect bonus code!</h5>)
+        setBouquetsWithQuantity(bouquetsData);
+
+        const sum = bouquetsData.reduce((acc, { bouquet, quantity }) => {
+            return acc + bouquet.price * quantity;
+        }, 0);
+
+        setPrice(sum);
+    };
+
+    return (isLoading ? <Loader/> :
+            <div className="order-page d-flex flex-column">
+                <div className="d-flex flex-column align-items-center position-absolute confirmation-div">
+                    {bonus ?
+                        (<h2 className="text-success text-center fw-bold">
+                            <del className="text-danger">
+                                {selectedDeliveryType ? price + selectedDeliveryType.price : price} ZL
+                            </del>
+                            {' '}{selectedDeliveryType && ((price + selectedDeliveryType.price) * (1 - bonus.discount)).toFixed(2)} ZL
+                        </h2>)
                         :
-                        (<></>)
+                        (<h2 className="text-success text-center fw-bold">{selectedDeliveryType ? price + selectedDeliveryType.price : price} ZL</h2>)
                     }
-                </Modal.Footer>
-            </Modal>
-
-            <Modal show={showAddressDialog} onHide={handleCloseAddressDialog} backdrop="static">
-                <Modal.Header closeButton>
-                    <Modal.Title>Enter new address:</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <h4 className="text-center">Street:</h4>
-                    <Input className="rounded-4 border border-2"></Input>
-                    <h4 className="text-center">House:</h4>
-                    <Input className="rounded-4 border border-2"></Input>
-                    <h4 className="text-center">Postal code:</h4>
-                    <Input className="rounded-4 border border-2"></Input>
-                </Modal.Body>
-                <Modal.Footer className="justify-content-center">
-                    <Button variant="success rounded-4">
-                        Confirm
-                    </Button>
-                </Modal.Footer>
-            </Modal>
-        </div>
+                    <Button variant="success" className="rounded-4 fw-bold px-4 py-2 fs-5">CONFIRM</Button>
+                    {bonus ?
+                        (<h2 className="text-success text-center fw-bold mt-3">Discount {bonus.discount * 100}%</h2>)
+                        : (<></>)
+                    }
+                </div>
+                <div className="d-flex flex-wrap justify-content-center gap-4">
+                    {bouquetsWithQuantity?.map((bouquetWithQuantity) => {
+                        return <OrderPositionCard bouquet={bouquetWithQuantity.bouquet} quantity={bouquetWithQuantity.quantity}/>
+                    })}
+                </div>
+                <div className="d-flex flex-wrap justify-content-center gap-5 mt-5">
+                    <DeliveryTypeCard setSelectedDeliveryType={setSelectedDeliveryType} setSelectedAddress={setAddress}/>
+                    <PaymentTypeCard setPaymentType={setPaymentType}/>
+                </div>
+                <BonusComponent setBonus={setBonus}/>
+            </div>
     )
 };
 

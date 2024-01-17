@@ -1,53 +1,87 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import "../styles/css/CartPage.css"
-import {Button, Image} from "react-bootstrap";
-import {DashCircle, PlusCircle} from "react-bootstrap-icons";
-import {Link, useNavigate} from "react-router-dom";
+import {Button} from "react-bootstrap";
+import {Link} from "react-router-dom";
+import {BouquetWithQuantity, CartPosition} from "../utils/types";
+import {getCookie} from "../utils/cookiesManager";
+import Loader from "../components/common/Loader";
+import CartPositionCard from "../components/CartPositionCard";
+import {findBouquet} from "../utils/bouquetUtils";
 
 const CartPage = () => {
-    const [bouquetsWithQuantity, setBouquetsWithQuantity] = useState([])
-    const [cartItems, setCartItems] = useState([])
-    const navigate = useNavigate()
+    const [bouquetsWithQuantity, setBouquetsWithQuantity] = useState<BouquetWithQuantity[]>([])
+    const [isDeleting, setIsDeleting] = useState(false)
+    const [isLoading, setIsLoading] = useState(true)
+    const [price, setPrice] = useState(0)
+
+
+    useEffect(() => {
+        if (getCookie('cart')) {
+            fetchData(getCookie('cart').positions);
+        } else {
+            setIsLoading(false)
+        }
+    }, []);
+
+    useEffect(() => {
+        if (isDeleting) {
+            setIsLoading(true)
+            if (getCookie('cart')) {
+                fetchData(getCookie('cart').positions);
+            } else {
+                setIsLoading(false)
+            }
+            setIsDeleting(false)
+        }
+    }, [isDeleting]);
+
+    const fetchData = async (positions: CartPosition[]) => {
+        const bouquetPromises = positions.map(async (cartPosition) => {
+            const bouquet = await findBouquet(cartPosition.bouquetId);
+            return {
+                bouquet,
+                quantity: cartPosition.quantity
+            };
+        });
+
+        const bouquetsData = await Promise.all(bouquetPromises);
+
+        setBouquetsWithQuantity(bouquetsData);
+        setIsLoading(false);
+
+        const sum = bouquetsData.reduce((acc, { bouquet, quantity }) => {
+            return acc + bouquet.price * quantity;
+        }, 0);
+
+        setPrice(sum);
+    };
 
     return (
-        <div className="d-flex flex-column cart-page align-items-center">
-
-            {!bouquetsWithQuantity ?
-                (
-                    <div className="d-flex flex-column align-items-center justify-content-center gap-3">
-                        <h4 className="text-center fw-bold">Your cart is empty!</h4>
-                        <Button variant="outline-success rounded-4 fw-bold">Go Shopping</Button>
-                    </div>)
-                :
-                (
-                    <>
-                        <div className="mt-2 border border-1 border-success d-flex flex-wrap p-3 col-12 mb-4 rounded-4">
-                            <div className="d-flex flex-column align-items-center col-3">
-                                <Image src="logo_2.png" className="position-img"/>
-                                <h4 className="text-black fw-bold">ROSES BOUQUET</h4>
+        isLoading ? <Loader/> :
+            <div className="d-flex flex-column cart-page align-items-center">
+                {bouquetsWithQuantity.length === 0 ?
+                    (
+                        <div className="d-flex flex-column align-items-center justify-content-center gap-3">
+                            <h4 className="text-center fw-bold">Your cart is empty!</h4>
+                            <Link to={"/"}>
+                                <Button variant="outline-success rounded-4 fw-bold">Go Shopping</Button>
+                            </Link>
+                        </div>)
+                    :
+                    (
+                        <div className="d-flex flex-column align-items-center my-4 gap-2">
+                            {bouquetsWithQuantity.map((bouquetWithQuantity) => {
+                                return <CartPositionCard bouquetWithQuantity={bouquetWithQuantity} setIsDeleting={setIsDeleting} setPrice={setPrice} price={price}/>
+                            })}
+                            <div>
+                                <h2 className="text-success text-center fw-bold">{price} ZL</h2>
+                                <Link to={"/create-order"}>
+                                    <Button variant="success" className="rounded-4 fw-bold my-2">CREATE ORDER</Button>
+                                </Link>
                             </div>
-                            <div className="w-50 col-3">
-                                <h4 className="text-black text-center fw-bold my-4">Bouquet made from 101 roses. Roses
-                                    are imported from Netherlands</h4>
-                                <h4 className="text-black text-center fw-bold">120 ZL</h4>
-                            </div>
-                            <div className="align-self-center col-3 d-flex flex-wrap justify-content-center gap-5">
-                                <div className="d-flex flex-wrap justify-content-center align-items-center">
-                                    <DashCircle size={30} className="icon-buttons"/>
-                                    <h3 className="text-black text-center fw-bold mx-4 mt-2">1</h3>
-                                    <PlusCircle size={30} className="icon-buttons"/>
-                                </div>
-                                <Button variant="outline-danger" className="rounded-4 fw-bold">DELETE</Button>
-                            </div>
-                        </div>
-                        <h2 className="text-success text-center fw-bold">240 ZL</h2>
-                        <Link to={"/create-order"}>
-                            <Button variant="success" className="rounded-4 fw-bold my-2">CREATE ORDER</Button>
-                        </Link>
-                    </>)
-            }
-
-        </div>
+                        </div>)
+                }
+            </div>
     )
 };
 

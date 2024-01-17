@@ -32,6 +32,7 @@ export interface User {
     lastName: string,
     phone: string,
     imageUri: string
+    addresses: Address[]
 }
 
 export interface Flower {
@@ -104,4 +105,9 @@ export interface Bonus {
     promoCode: string,
     discount: number,
     durationDate: string
+}
+
+export interface BouquetWithQuantity {
+    bouquet: Bouquet,
+    quantity: number
 }
