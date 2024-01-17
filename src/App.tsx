@@ -5,6 +5,7 @@ import {Route, Routes} from "react-router-dom";
 import Home from "./pages/Home";
 import CartPage from "./pages/CartPage";
 import CreateOrderPage from "./pages/CreateOrderPage";
+import CustomBouquetsPage from "./pages/CustomBouquetsPage";
 import BouquetsPage from "./pages/BouquetsPage";
 import FlowersPage from "./pages/FlowersPage";
 import {ToastContainer} from "react-toastify";
@@ -19,8 +20,9 @@ function App() {
                     <Route path={"/"} element={<Home/>}/>
                     <Route element={<CartPage/>} path={"/cart"}/>
                     <Route element={<CreateOrderPage/>} path={"/create-order"}/>
-                    <Route path="/bouquets" element={<BouquetsPage/>}></Route>
-                    <Route path="/flowers" element={<FlowersPage/>}></Route>
+                    <Route path="/bouquets" element={<BouquetsPage/>}/>
+                    <Route path="/bouquets/custom" element={<CustomBouquetsPage/>}/>
+                    <Route path="/flowers" element={<FlowersPage/>}/>
                 </Routes>
             </main>
             <Footer/>
