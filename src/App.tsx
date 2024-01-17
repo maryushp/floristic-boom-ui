@@ -7,7 +7,8 @@ import CartPage from "./pages/CartPage";
 import CreateOrderPage from "./pages/CreateOrderPage";
 import BouquetsPage from "./pages/BouquetsPage";
 import FlowersPage from "./pages/FlowersPage";
-
+import {ToastContainer} from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
     return (
@@ -23,6 +24,20 @@ function App() {
                 </Routes>
             </main>
             <Footer/>
+            <ToastContainer
+                position="bottom-left"
+                autoClose={3000}
+                limit={2}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss={false}
+                draggable
+                pauseOnHover
+                theme="colored"
+
+            />
         </>
     );
 }
