@@ -77,7 +77,9 @@ const CreateOrderPage = () => {
                 removeCookie('cart')
                 setIsOrderPlaced(true)
                 setIsLoading(false)
-                navigate("/")
+                setTimeout(() => {
+                    navigate("/");
+                }, 2000);
             } catch (e) {
                 if (isAxiosError(e)) {
                     console.log("Error while creating order")
