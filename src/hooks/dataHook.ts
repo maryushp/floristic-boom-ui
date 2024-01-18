@@ -2,13 +2,15 @@ import {useEffect, useState} from 'react';
 import {isAxiosError} from 'axios';
 import {useLocation} from "react-router-dom";
 import {CHANGE_THE_CRITERIA} from "../utils/constants";
+import {Filter} from "../utils/types";
 
 interface UseDataProps {
-    defaultSize:number,
-    getFunction: (page: number, size: number) => Promise<any>;
+    defaultSize: number,
+    getFunction: (page: number, size: number, filters: any) => Promise<any>,
+    filters?:Filter;
 }
 
-const useDataHook = ({defaultSize,getFunction}: UseDataProps) => {
+const useDataHook = ({defaultSize, getFunction, filters}: UseDataProps) => {
     const [data, setData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [totalPages, setTotalPages] = useState(0);
@@ -20,12 +22,15 @@ const useDataHook = ({defaultSize,getFunction}: UseDataProps) => {
     const size = queryParams.get("size");
     const currentSize = size ? parseInt(size) : defaultSize
     const [error, setError] = useState('');
-    const getData = async (page: number, size: number) => {
+    const createFilter = () => {
+
+    }
+    const getData = async (page: number, size: number, filters: any) => {
         try {
             setError('');
             setIsLoading(true);
 
-            const result = await getFunction(page, size);
+            const result = await getFunction(page, size, filters);
 
             setTotalPages(result.totalPages);
             setTotalElems(result.totalElements);
@@ -41,7 +46,9 @@ const useDataHook = ({defaultSize,getFunction}: UseDataProps) => {
     };
 
     useEffect(() => {
-        getData(currentPage, currentSize);
+        setError("")
+        getData(currentPage, currentSize, filters);
+
     }, [getFunction, currentPage, currentSize, location]);
 
     return {
@@ -51,7 +58,7 @@ const useDataHook = ({defaultSize,getFunction}: UseDataProps) => {
         totalElems,
         currentPage,
         currentSize,
-        error,
+        error
     };
 };
 

@@ -4,7 +4,6 @@ import "../../styles/css/Modal.css"
 import {getCustomBouquet} from "../../utils/bouquetCreationManager";
 import {Bouquet, BouquetCreationRequest, Color, FlowerBouquet, FlowerBouquetRequest} from "../../utils/types";
 import FlowerBouquetCard from "../../components/FlowerBouquetCard";
-import {FormSelect} from "react-bootstrap";
 import _ from "lodash";
 import {createBouquet} from "../../utils/bouquetUtils";
 import {toast} from "react-toastify";
@@ -12,11 +11,13 @@ import {isAxiosError} from "axios";
 import {addPosition} from "../../utils/cartManager";
 import {
     AT_LEAST_ONE_FLOWER,
-    AT_MOST_SIX_FLOWERS, BOUQUET_DESCRIPTION_10_255,
+    AT_MOST_SIX_FLOWERS,
+    BOUQUET_DESCRIPTION_10_255,
     BOUQUET_NAME_4_45,
     DESCRIPTION_REGEX,
     ITEM_NAME_REGEX
 } from "../../utils/constants";
+import ColorSelect from "../../components/filters/ColorForm";
 
 interface BouquetCreationModalProps {
     onSuccess: () => void;
@@ -135,17 +136,7 @@ const BouquetCreationModal = ({onSuccess}: BouquetCreationModalProps) => {
                         <div className="w-50 d-flex justify-content-center">
                             <div className="p-3">
                                 <h5> Wrapper Color</h5>
-                                <FormSelect className="mt-3 text-center" size="sm" value={wrapperColor}
-                                            onChange={handleColorChange} style={{
-                                    backgroundColor: wrapperColor.toLowerCase(),
-                                    color: (wrapperColor == Color.WHITE || wrapperColor == Color.YELLOW) ? "black" : "white"
-                                }}>
-                                    {Object.values(Color).map(color => (
-                                        <option key={color} value={color}>
-                                            {color}
-                                        </option>
-                                    ))}
-                                </FormSelect>
+                                <ColorSelect color={wrapperColor} handleColorChange={(e) => handleColorChange(e)}/>
                                 <hr/>
                                 <h5> Name</h5>
                                 <Input
