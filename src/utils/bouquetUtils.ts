@@ -1,5 +1,6 @@
 import axiosInstance from "./axiosConfig";
-import {BouquetCreationRequest, Filter} from "./types";
+import {Bouquet, Filter} from "./types";
+import {BouquetCreationRequest} from "./types";
 import {getUserFromStorage} from "./userUtils";
 import {checkMaxPrice, checkMinPrice, checkOccasion, checkSize, isFilterEmpty} from "./filterUtils";
 
@@ -38,4 +39,10 @@ const createBouquet = async (bcr: BouquetCreationRequest) => {
     const response = await axiosInstance.post(bouquetsEndpoint, bcr)
     return response.data
 }
-export {readAllBouquets, createBouquet, readUserBouquets}
+
+const findBouquet = async (id: number) => {
+    const response =  await axiosInstance.get<Bouquet>(bouquetsEndpoint + "/" + id)
+    return response.data
+}
+
+export {readAllBouquets, findBouquet, createBouquet, readUserBouquets}

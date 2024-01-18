@@ -32,6 +32,7 @@ export interface User {
     lastName: string,
     phone: string,
     imageUri: string
+    addresses: Address[]
 }
 
 export interface Flower {
@@ -93,12 +94,6 @@ export interface DeliveryType {
     price: number
 }
 
-export interface Delivery {
-    id: number,
-    deliveryType: DeliveryType,
-    address: Address
-}
-
 export interface Bonus {
     id: number,
     promoCode: string,
@@ -132,4 +127,17 @@ export interface Filter {
     priceMax: number | null,
     color?: Color | null,
     size?: Size | null;
+}
+
+export interface BouquetWithQuantity {
+    bouquet: Bouquet,
+    quantity: number
+}
+
+export interface OrderCreationRequest {
+    paymentType: PaymentType,
+    addressId: number,
+    deliveryTypeId: number,
+    bonusId: number | undefined,
+    bouquets: BouquetWithQuantity[]
 }

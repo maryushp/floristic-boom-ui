@@ -26,12 +26,14 @@ export const removePosition = (id: number) => {
     setCartPositionsToCookies(positions);
 };
 
-export const updatePositionQuantity = (id: number | undefined, quantity: number) => {
-    let positions = getCartPositionsFromCookies();
-    positions = positions.map((position) =>
-        position.bouquetId === id ? {...position, quantity: quantity} : position
-    );
-    setCartPositionsToCookies(positions);
+export const updatePositionQuantity = (id: number, quantity: number) => {
+    const positions: CartPosition[] = getCookie('cart').positions;
+
+    const updatedPositions = positions.map((position) =>
+        position.bouquetId === id ? { ...position, quantity: quantity } : position
+    ).filter((position) => quantity !== 0 || position.bouquetId !== id);
+
+    setCartPositionsToCookies(updatedPositions);
 };
 
 export const getPositionByBouquetId = (id: number): CartPosition | undefined => {
