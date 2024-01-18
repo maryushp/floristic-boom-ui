@@ -105,3 +105,31 @@ export interface Bonus {
     discount: number,
     durationDate: string
 }
+
+export enum Size {
+    SMALL = "Small",
+    MEDIUM = "Medium",
+    BIG = "Big",
+    ALL = "All"
+}
+
+export enum Occasion {
+    BIRTHDAY = "Birthday",
+    ANNIVERSARY = "Anniversary",
+    GRADUATION = "Graduation"
+}
+
+export interface OccasionFilter {
+    occasion: Occasion;
+    minFlowerCount?: number;
+    maxFlowerCount?: number;
+    wrapperColor?: Color;
+}
+
+export interface Filter {
+    occasion: Occasion | null,
+    priceMin: number | null,
+    priceMax: number | null,
+    color?: Color | null,
+    size?: Size | null;
+}
