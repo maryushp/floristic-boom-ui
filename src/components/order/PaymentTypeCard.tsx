@@ -1,6 +1,6 @@
 import React, {ChangeEvent, useEffect, useState} from 'react';
 import Form from "react-bootstrap/Form";
-import {PaymentType} from "../utils/types";
+import {PaymentType} from "../../utils/types";
 
 type PaymentTypeCardProps = {
     setPaymentType: (paymentType: PaymentType) => void

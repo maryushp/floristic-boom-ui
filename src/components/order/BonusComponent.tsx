@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {Button, Modal} from "react-bootstrap";
 import {Input} from "reactstrap";
-import {Bonus} from "../utils/types";
-import {findBonusByCode} from "../utils/bonusUtils";
+import {Bonus} from "../../utils/types";
+import {findBonusByCode} from "../../utils/bonusUtils";
 import {isAxiosError} from "axios";
 
 type BonusComponentProps = {

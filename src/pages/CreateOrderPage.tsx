@@ -12,11 +12,11 @@ import {
 } from "../utils/types";
 import {getCookie, removeCookie} from "../utils/cookiesManager";
 import {findBouquet} from "../utils/bouquetUtils";
-import OrderPositionCard from "../components/OrderPositionCard";
+import OrderPositionCard from "../components/order/OrderPositionCard";
 import Loader from "../components/common/Loader";
-import PaymentTypeCard from "../components/PaymentTypeCard";
-import DeliveryTypeCard from "../components/DeliveryTypeCard";
-import BonusComponent from "../components/BonusComponent";
+import PaymentTypeCard from "../components/order/PaymentTypeCard";
+import DeliveryTypeCard from "../components/order/DeliveryTypeCard";
+import BonusComponent from "../components/order/BonusComponent";
 import {createOrder} from "../utils/orderUtils";
 import {isAxiosError} from "axios";
 import {useNavigate} from "react-router-dom";
