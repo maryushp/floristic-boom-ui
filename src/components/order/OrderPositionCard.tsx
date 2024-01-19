@@ -1,6 +1,6 @@
 import React from 'react';
 import {Image} from "react-bootstrap";
-import {Bouquet} from "../utils/types";
+import {Bouquet} from "../../utils/types";
 import {Link} from "react-router-dom";
 
 type OrderPositionProps = {

@@ -1,9 +1,9 @@
 import React, {ChangeEvent, useEffect, useState} from 'react';
-import {Address, DeliveryType} from "../utils/types";
+import {Address, DeliveryType} from "../../utils/types";
 import Form from "react-bootstrap/Form";
-import {readAllDeliveryTypes} from "../utils/deliveryUtils";
-import Loader from "./common/Loader";
-import {getUserFromStorage} from "../utils/userUtils";
+import {readAllDeliveryTypes} from "../../utils/deliveryUtils";
+import Loader from "../common/Loader";
+import {getUserFromStorage} from "../../utils/userUtils";
 
 type DeliveryTypeCardProps = {
     setSelectedDeliveryType: (deliveryType: DeliveryType) => void
